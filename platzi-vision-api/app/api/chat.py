@@ -19,10 +19,29 @@ def chat():
       ]
 
       for message in data['messages']:
-         formatted_messages.append({
-            "role": message["role"],
-            "content": message['content'],
-         })
+         # si el mensage contiene la propiedad imagen es que se ha adjuntado una para su procesamiento
+         if 'image_data' in message:
+               #Procesar la imagen
+               content_part = [{"type":"text","text":message['content']}] #lo que solicito el usuario con la imagen
+
+               for image_data_base64 in message['image_data']:
+                   content_part.append({
+                       "type":"image_url",
+                       "image_url":{
+                           "url": f"data:image/png,base64,{image_data_base64}"
+                       }
+                   })
+               #print("contenido imagen")
+               #print(content_part)
+               formatted_messages.append({
+                  "role": message["role"],
+                  "content": content_part,
+               })
+         else:
+               formatted_messages.append({
+                  "role": message["role"],
+                  "content": message['content'],
+               })
 
       client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -35,8 +54,8 @@ def chat():
       def generate():
         #iteramos por cada pedazo de response asi es como se ve el stream
         for chunk in response:
-          print("Respuesta chunk: ")
-          print(chunk) # muestra cada parte de la respuesta
+          ##print("Respuesta chunk: ")
+          ##print(chunk) # muestra cada parte de la respuesta
           if chunk.choices[0].delta.content:
               yield f"data: {json.dumps({'content': chunk.choices[0].delta.content,
                                         'status':'streaming'})}\n\n"
