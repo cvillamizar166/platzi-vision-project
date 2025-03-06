@@ -59,3 +59,7 @@ PlatziVision se compone de 2 partes: una interfaz web y una API. La interfaz web
 - Respuesta a preguntas en tiempo real (vía streaming)
 - Procesamiento de múltiples imágenes
 - Generación de imágenes
+
+
+## Ejemplo implementando la lectura de imagenes en el chat
+<img src="./.github/DescripcionImagenes.png" alt="PlatziVision" width="60%">
